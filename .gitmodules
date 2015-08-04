@@ -1,0 +1,9 @@
+[submodule "Android"]
+	path = Android
+	url = git://github.com/cobaltians-plugins/plugins-Location-Android.git
+[submodule "iOS"]
+	path = iOS
+	url = git://github.com/cobaltians-plugins/plugins-Location-iOS.git
+[submodule "Web"]
+	path = Web
+	url = git://github.com/cobaltians-plugins/plugins-Location-Web.git
