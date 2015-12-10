@@ -33,8 +33,8 @@ start takes one single object as argument. here are the available property of th
 | timeout  | number (ms) | undefined | Stop searching location after this timeout |
 | frenquency  | number (ms) | 500 | Number of ms between two location results in `all` mode |
 | timestamp  | number (ms) | 12000 (=2mins) | max age of previous location (if any) |
-| onStatusChanged  | function |  | see [location.onSattusChanged](#location.onSattusChanged) bellow |
-| onLocationChanged  | function |  | see [location.onLocationChanged](#location.onLocationChanged) bellow |
+| onStatusChanged  | function | a logging function | see location.onSattusChanged bellow |
+| onLocationChanged  | function | a logging function | see location.onLocationChanged bellow |
 
 ## location.stop
 
