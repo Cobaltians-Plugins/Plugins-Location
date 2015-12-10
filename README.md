@@ -38,15 +38,7 @@ start takes one single object as argument. here are the available property of th
 
 ## location.stop
 
-Stop searching location now. For the `all` mode or to cancel a long `filter` call.
-
-## location.onSattusChanged
-
-A callback to handle errors and timeout. It receive a status string that can be :
-
-* `disabled` if the user disabled location for this app.
-* `refused` if the user refused to enable location for this app.
-* `timeout` if the location plugin hits the timeout defined.
+A function to stop searching for location now. Can be useful for the `all` mode or to cancel a long `filter` call.
 
 ## location.onLocationChanged
 
@@ -65,6 +57,16 @@ It receive one location parameter. Here is an example value :
 
 `accuracy` and `timestamp` are only returned in `all` mode.
 
+## location.onSattusChanged
+
+A callback to handle errors and timeout. It receive an object containing a `status` string that can be :
+
+* `disabled` if the user disabled location for this app.
+* `refused` if the user refused to enable location for this app.
+* `timeout` if the location plugin hits the timeout defined.
+
+In case of a `timeout` status, the detailled location of the last location found is also present in a `loc` property. Be carreful with it, it can be quite far from your actual position. This location contains `accuracy` and `timestamp`to help you decide if it's a good enough one or not.
+
 
 ## cobalt.init options
 
@@ -78,8 +80,8 @@ cobalt.init({
             onLocationChanged : function(location){ 
                 cobalt.log('location received :', location)
             },
-            onSattusChanged : function(status){ 
-                cobalt.log('location status changed :', status)
+            onSattusChanged : function(data){ 
+                cobalt.log('location status changed :', data.status)
             }
 
         }
