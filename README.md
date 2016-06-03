@@ -25,34 +25,32 @@ The following functions and properties are accessible _via_ the `cobalt.location
 
 ### Function `start (options)`
 
-Start searching for the device geolocation. Takes one single object with the following properties as argument:
+Start searching for the device geolocation. Once a correct location has been found, the plugin automatically stops. Takes one single object with the following properties as argument:
 
 | Property | Type | Default value | Description |
 | -------- | ---- | ------------- | ----------- |
-| mode  | string | `filter` | Can be `all` or `filter`:<br>- `all` returns every locations found<br>- `filter` returns only one location matching the following filters |
-| accuracy  | integer (meters) | `100` | Minimum accuracy of returned location |
-| timeout  | integer (milliseconds) | infinite | Stop searching for location after this timeout |
-| interval  | integer (milliseconds) | `500` | Time interval between two location results in `all` mode |
-| age  | integer (milliseconds) | 120000 (2 minutes) | Maximum age of previous location (if any) |
-| onStatusChanged  | callback | Logging function |  |
-| onLocationChanged  | callback | Logging function | Called when a location has been found |
+| `mode`  | String | `filter` | Can be `all` or `filter`:<br>- `all` returns every locations found<br>- `filter` returns only one location matching the following filters |
+| `accuracy`  | Integer (meters) | `100` | Minimum accuracy of returned location |
+| `timeout`  | Integer (milliseconds) | infinite | Stop searching for location after this timeout |
+| `interval`  | Integer (milliseconds) | `500` | Minimum time interval between two location results in `all` mode |
+| `age`  | Integer (milliseconds) | 120000 (2 minutes) | Maximum age of previous location (if any) |
+| `onStatusChanged`  | Callback | Logging function | Shortcut to assign [`onLocationChanged`](#callback-onlocationchanged) |
+| `onLocationChanged`  | Callback | Logging function | Shortcut to assign [`onStatusChanged`](#callback-onstatuschanged) |
 
 ### Function `stop ()`
 
-A function to stop searching for location. Can be useful for the `all` mode or to cancel a long `filter` call.
+Stop searching for location. Can be useful for the `all` mode or to cancel a long `filter` call.
 
 ### Callback `onLocationChanged`
 
-A callback that receive every location changes in `all` mode and just one in `filter` mode, taking one object as argument with the following properties :
+Receives every location changes in `all` mode and just one in `filter` mode, taking one object as argument with the following properties:
 
-```
-{
-    longitude: -3.4572026803687095,
-    latitude: 48.75180676157803,
-    accuracy: 180, // In meters
-    timestamp: 1464947315568 // In milliseconds
-}
-```
+| Name | Type | Description |
+|------|------|-------------|
+| `longitude` | Float | Longitude |
+| `latitude` | Float | Latitude |
+| `accuracy` | Integer | Location accuracy in meters |
+| `timestamp` | Integer | Location timestamp in milliseconds |
 
 ### Enum `status`
 
@@ -72,7 +70,7 @@ In case of a `TIMEOUT` status, the most accurate location found is also present 
 
 ### `cobalt.init` options
 
-`onStatusChanged` and `onLocationChanged` can also be defined in `cobalt.init` like this :
+`onStatusChanged` and `onLocationChanged` can also be defined in `cobalt.init` like this:
 
 ```
 cobalt.init({
@@ -80,16 +78,20 @@ cobalt.init({
     plugins: {
         location: {
             onLocationChanged: function (location) { 
-                cobalt.log('location received :', location);
+                cobalt.log('Location received: ', location);
             },
-            onSattusChanged: function (data) { 
-                cobalt.log('location status changed :', data.status);
+            onStatusChanged: function (data) { 
+                cobalt.log('Status received: ', data.status);
             }
 
         }
     }
 });
 ```
+
+## Example
+
+See the [catalog](https://github.com/Cobaltians-Samples/Samples-Catalog-Web/blob/master/plugins-location.html).
 
 ## Want more?
 
