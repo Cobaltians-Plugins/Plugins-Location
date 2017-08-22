@@ -1,101 +1,98 @@
 #LocationPlugin
 
-Location plugin allows you to get the geolocation of the user.
-
+The Location plugin allows you to get the geolocation of the user.
 
 ## How to use
 
-* import the plugin to your project as explained [here](https://github.com/cobaltians/cobalt/wiki/Plugins-usage)
+* Import the plugin to your project as explained [here](https://github.com/cobaltians/cobalt/wiki/Plugins-usage)
 * Add the cobalt.location.js to your web JS folder
-* Add an html link to the cobalt.location.js plugin script after the cobalt link in the HEAD tag
+* Add an html `<link>` to the cobalt.location.js plugin script after the cobalt link in the `<head>` tag
 
-## Shortest usage
+## Basic usage
 
-If you are a cowboy in a hurry, shoot this :
+If you are a cowboy in a hurry, shoot this:
 
 ```
 cobalt.location.start({
-	mode : 'filter',
-	onLocationChanged:function(location){
-		cobalt.log('Got location', location);
-	}
+    onLocationChanged: function (location) {
+        cobalt.log('Got location: ', location);
+    }
 });
 ```
+## Functions
 
-## location.start
+The following functions and properties are accessible _via_ the `cobalt.location` shortcut.
 
-start takes one single object as argument. here are the available property of this object.
+### Function `start (options)`
 
-| property | type | default value | description |
+Start searching for the device geolocation. Once a correct location has been found, the plugin automatically stops. Takes one single object with the following properties as argument:
+
+| Property | Type | Default value | Description |
 | -------- | ---- | ------------- | ----------- |
-| mode  | string | **this property is mandatory** | Can be `all` or `filter`. <br> - The `all` mode returns every locations found<br> - The `filter` mode returns only one location |
-| accuracy  | number (metters) | 100 | Minimum accuracy of returned locations |
-| timeout  | number (ms) | undefined | Stop searching location after this timeout |
-| frenquency  | number (ms) | 500 | Number of ms between two location results in `all` mode |
-| timestamp  | number (ms) | 12000 (=2mins) | max age of previous location (if any) |
-| onStatusChanged  | function | a logging function | see location.onSattusChanged bellow |
-| onLocationChanged  | function | a logging function | see location.onLocationChanged bellow |
+| `mode`  | String | `filter` | Can be `all` or `filter`:<br>- `all` returns every locations found<br>- `filter` returns only one location matching the following filters |
+| `accuracy`  | Integer (meters) | `100` | Minimum accuracy of returned location |
+| `timeout`  | Integer (milliseconds) | infinite | Stop searching for location after this timeout |
+| `interval`  | Integer (milliseconds) | `500` | Minimum time interval between two location results in `all` mode |
+| `age`  | Integer (milliseconds) | 120000 (2 minutes) | Maximum age of previous location (if any) |
+| `onStatusChanged`  | Callback | Logging function | Shortcut to assign [`onLocationChanged`](#callback-onlocationchanged) |
+| `onLocationChanged`  | Callback | Logging function | Shortcut to assign [`onStatusChanged`](#callback-onstatuschanged) |
 
-## location.stop
+### Function `stop ()`
 
-A function to stop searching for location now. Can be useful for the `all` mode or to cancel a long `filter` call.
+Stop searching for location. Can be useful for the `all` mode or to cancel a long `filter` call.
 
-## location.onLocationChanged
+### Callback `onLocationChanged`
 
-A callback that receive every location changes in `all` mode and just one in `filter` mode.
+Receives every location changes in `all` mode and just one in `filter` mode, taking one object as argument with the following properties:
 
-It receive one location parameter. Here is an example value :
+| Name | Type | Description |
+|------|------|-------------|
+| `longitude` | Float | Longitude |
+| `latitude` | Float | Latitude |
+| `accuracy` | Integer | Location accuracy in meters |
+| `timestamp` | Integer | Location timestamp in milliseconds |
 
-```
-{
-    lng : -3.4572026803687095,
-    lat : 48.75180676157803,
-    accuracy : 180,
-    timestamp : 1449759043
-}
-```
+### Enum `status`
 
-`accuracy` and `timestamp` are only returned in `all` mode.
+This enum contains the different statuses that `onStatusChanged` can receive.
 
-## location.onSattusChanged
+| Name | Description |
+|------|-------------|
+| `REFUSED` | The user has not enabled localization for this app |
+| `DISABLED` | The user deactivated localization for this app after the localization started |
+| `TIMEOUT` | No location matching the given filters were found |
 
-A callback to handle errors and timeout. It receive an object containing a `status` string that can be :
+### Callback `onStatusChanged`
 
-* `disabled` if the user disabled location for this app.
-* `refused` if the user refused to enable location for this app.
-* `timeout` if the location plugin hits the timeout defined.
+Handles errors and timeout. It takes an object containing a `status` string that can be one of the above enum values.
 
-In case of a `timeout` status, the detailled location of the last location found is also present in a `loc` property. Be carreful with it, it can be quite far from your actual position. This location contains `accuracy` and `timestamp`to help you decide if it's a good enough one or not.
+In case of a `TIMEOUT` status, the most accurate location found is also present in a `location` property. Be careful with it, it can be quite far from your actual position.
 
+### `cobalt.init` options
 
-## cobalt.init options
-
-`location.onSattusChanged` and `location.onLocationChanged` can also be defined in cobalt.init like this :
+`onStatusChanged` and `onLocationChanged` can also be defined in `cobalt.init` like this:
 
 ```
 cobalt.init({
-    debug : true,
-    plugins : {
-        location : {
-            onLocationChanged : function(location){ 
-                cobalt.log('location received :', location)
+    debug: true,
+    plugins: {
+        location: {
+            onLocationChanged: function (location) { 
+                cobalt.log('Location received: ', location);
             },
-            onSattusChanged : function(data){ 
-                cobalt.log('location status changed :', data.status)
+            onStatusChanged: function (data) { 
+                cobalt.log('Status received: ', data.status);
             }
 
         }
     }
-})
+});
 ```
 
-##Platforms
+## Example
 
-**warning** this is not coded yet on iOS !
+See the [catalog](https://github.com/Cobaltians-Samples/Samples-Catalog-Web/blob/master/plugins-location.html).
 
+## Want more?
 
-##Planned features
-
-Next features are:
-
- * please suggest in the issue tracker or pull request your own changes!
+If you have any ideas or improvements to propose, please feel free to do so in the issue tracker!
